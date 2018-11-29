@@ -7,5 +7,6 @@ public class OilYhq {
     public String CouponMoney;//      CouponUseType=0时表示优惠金额   CouponUseType  =1时表示折扣比例(%)
     public String CouponExpMoney;//   最低消费额,消费达到这个金额则允许使用优惠券
     public String DetailCode;//     优惠券编码
+    public String DetailID;
 
 }
