@@ -46,7 +46,7 @@
 </RelativeLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/viewcolor"></View>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -75,7 +75,7 @@
         </RelativeLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:background="@color/viewcolor"></View>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -104,7 +104,7 @@
     </RelativeLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/viewcolor"></View>
 
         <RelativeLayout
@@ -136,7 +136,7 @@
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/viewcolor"></View>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -167,7 +167,7 @@
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/viewcolor"></View>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -198,7 +198,7 @@
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/viewcolor"></View>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -229,7 +229,7 @@
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/viewcolor"></View>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -276,7 +276,7 @@
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/viewcolor"></View>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -323,7 +323,7 @@
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/viewcolor"></View>
 
     <RelativeLayout
@@ -360,7 +360,7 @@
     </RelativeLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:background="@color/viewcolor"></View>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -390,9 +390,85 @@
     </RelativeLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:background="@color/viewcolor"></View>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="@color/text_30"
+                android:text="优 惠 券"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                />
 
+            <RelativeLayout
+                android:id="@+id/oil_rl_yhqchose"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true">
+
+                <TextView
+                    android:id="@+id/oil_tv_yhq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:textColor="@color/theme_red"
+                    android:layout_alignParentRight="true"
+                    android:textSize="15sp"
+                    android:text="请选择"
+                    />
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="15dp"
+                    android:background="@drawable/next_button"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    />
+            </RelativeLayout>
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/viewcolor"></View>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="@color/text_30"
+                android:text="实付金额"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                />
+            <TextView
+                android:id="@+id/vip_tv_sfmoney"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/text_30"
+                android:textSize="15sp"
+                android:text="0.00"
+                />
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/viewcolor"></View>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -516,7 +592,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:background="@color/viewcolor"></View>
     <RelativeLayout
         android:id="@+id/consumption_rl_money"
@@ -552,7 +628,7 @@
             />
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_alignParentBottom="true"
             android:background="@color/viewcolor"></View>
     </RelativeLayout>
@@ -591,7 +667,7 @@
                 />
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="0.5dp"
                 android:layout_alignParentBottom="true"
                 android:background="@color/viewcolor"></View>
         </RelativeLayout>
@@ -630,7 +706,7 @@
             />
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_alignParentBottom="true"
             android:background="@color/viewcolor"></View>
     </RelativeLayout>
@@ -668,7 +744,7 @@
             />
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_alignParentBottom="true"
             android:background="@color/viewcolor"></View>
     </RelativeLayout>
@@ -702,7 +778,7 @@
             />
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_alignParentBottom="true"
             android:background="@color/viewcolor"></View>
     </RelativeLayout>
@@ -735,14 +811,13 @@
             />
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_alignParentBottom="true"
             android:background="@color/viewcolor"></View>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginTop="1dp"
         android:background="@color/white"
         >
         <TextView
@@ -768,7 +843,7 @@
     </RelativeLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:background="@color/viewcolor"></View>
 
 

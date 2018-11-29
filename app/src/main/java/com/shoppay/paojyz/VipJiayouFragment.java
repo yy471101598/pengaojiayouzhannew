@@ -35,15 +35,14 @@ import com.loopj.android.http.RequestParams;
 import com.shoppay.paojyz.bean.FastShopZhehMoney;
 import com.shoppay.paojyz.bean.JifenDk;
 import com.shoppay.paojyz.bean.OilMsg;
+import com.shoppay.paojyz.bean.OilYhq;
 import com.shoppay.paojyz.bean.SystemQuanxian;
 import com.shoppay.paojyz.bean.VipInfo;
 import com.shoppay.paojyz.bean.VipInfoMsg;
-import com.shoppay.paojyz.bean.Zhekou;
 import com.shoppay.paojyz.card.ReadCardOpt;
 import com.shoppay.paojyz.http.InterfaceBack;
 import com.shoppay.paojyz.tools.ActivityStack;
 import com.shoppay.paojyz.tools.BluetoothUtil;
-import com.shoppay.paojyz.tools.CommonUtil;
 import com.shoppay.paojyz.tools.CommonUtils;
 import com.shoppay.paojyz.tools.DateUtils;
 import com.shoppay.paojyz.tools.DayinUtils;
@@ -54,6 +53,7 @@ import com.shoppay.paojyz.tools.OilChoseDialog;
 import com.shoppay.paojyz.tools.PreferenceHelper;
 import com.shoppay.paojyz.tools.StringUtil;
 import com.shoppay.paojyz.tools.UrlTools;
+import com.shoppay.paojyz.tools.YhqChoseDialog;
 import com.shoppay.paojyz.wxcode.MipcaActivityCapture;
 
 import org.json.JSONObject;
@@ -81,12 +81,14 @@ public class VipJiayouFragment extends Fragment {
     private Dialog paydialog;
     private String xfmoney;
     private List<OilMsg> list;
+    private List<OilYhq> yhqlist;
     private OilMsg oilmsg;
+    private OilYhq yhqmsg;
     private RelativeLayout rl_password;
     private RadioButton rb_money, rb_wx, rb_zhifubao, rb_isYinlian, rb_yue, rb_qita;
     private EditText et_password;
     private MyApplication app;
-     private SystemQuanxian sysquanxian;
+    private SystemQuanxian sysquanxian;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -146,8 +148,9 @@ public class VipJiayouFragment extends Fragment {
     private String password = "";
     private MsgReceiver msgReceiver;
     private String orderAccount;
-    private RelativeLayout rl_oilchose;
+    private RelativeLayout rl_oilchose, rl_yhqchose;
     private boolean isSuccess = false;
+    private TextView tv_yhq, tv_sfmoney;
 
     //    private Intent intent;
 //    private Dialog weixinDialog;
@@ -155,10 +158,10 @@ public class VipJiayouFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_vipjiayouconsumption,container, false);
-        app= (MyApplication) getActivity().getApplication();
-        sysquanxian=app.getSysquanxian();
-        Log.d("xx",app.toString());
+        View view = inflater.inflate(R.layout.fragment_vipjiayouconsumption, container, false);
+        app = (MyApplication) getActivity().getApplication();
+        sysquanxian = app.getSysquanxian();
+        Log.d("xx", app.toString());
         initView(view);
         dialog = DialogUtil.loadingDialog(getActivity(), 1);
         paydialog = DialogUtil.payloadingDialog(getActivity(), 1);
@@ -305,7 +308,7 @@ public class VipJiayouFragment extends Fragment {
                     tv_zhmoney.setText("0.00");
                     tv_obtainjf.setText("0.00");
                 } else {
-                    if (PreferenceHelper.readString(MyApplication.context, "shoppay", "memid", "123").equals("123")) {
+                    if (!isSuccess) {
                         Toast.makeText(MyApplication.context, PreferenceHelper.readString(MyApplication.context, "shoppay", "viptoast", "未查询到会员"), Toast.LENGTH_SHORT).show();
                         et_xfmoney.setText("");
                     } else {
@@ -320,12 +323,27 @@ public class VipJiayouFragment extends Fragment {
                             int point = (int) Double.parseDouble(num);
                             tv_zhmoney.setText(num);
                             if (app.getIsPointByOilExp() == 1) {
-                                int po=(int) Double.parseDouble(CommonUtils.multiply(point + "", app.getOilExpPointNum() + ""));
-                                tv_obtainjf.setText(po+"");
+                                int po = (int) Double.parseDouble(CommonUtils.multiply(point + "", app.getOilExpPointNum() + ""));
+                                tv_obtainjf.setText(po + "");
                             } else {
-                                int po=(int) CommonUtils.div(Double.parseDouble(xfmoney) , Double.parseDouble(oilmsg.getOilPoint()),2);
-                                tv_obtainjf.setText(po+"");
+                                int po = (int) CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPoint()), 2);
+                                tv_obtainjf.setText(po + "");
                             }
+                            tv_yhq.setText("请选择");
+                            tv_sfmoney.setText(xfmoney);
+//                            if (tv_yhq.getText().toString().equals("请选择")) {
+//                                tv_sfmoney.setText(xfmoney);
+//                            } else {
+//                                if (yhqmsg.CouponUseType.equals("0")) {//(0:代金券  1:折扣券)
+//                                    double yh = CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(yhqmsg.CouponExpMoney), 1);
+//                                    int yhnum = (int) yh;
+//                                    String yhmoney = CommonUtils.multiply(yhnum + "", yhqmsg.CouponMoney);
+//                                    tv_sfmoney.setText(CommonUtils.del(Double.parseDouble(xfmoney), Double.parseDouble(yhmoney)) + "");
+//
+//                                } else {
+//                                    tv_sfmoney.setText(CommonUtils.multiply(xfmoney, yhqmsg.CouponMoney));
+//                                }
+//                            }
                         }
 //                        String zhmoney = CommonUtils.multiply(CommonUtils.div(Double.parseDouble(PreferenceHelper.readString(getActivity(), "shoppay", "Discount", "0")), 100, 2) + "", xfmoney);
 //                        tv_zhmoney.setText(StringUtil.twoNum(zhmoney));
@@ -480,6 +498,9 @@ public class VipJiayouFragment extends Fragment {
                         Type listType = new TypeToken<List<OilMsg>>() {
                         }.getType();
                         list = gson.fromJson(jso.getString("OilList"), listType);
+                        Type listType1 = new TypeToken<List<OilYhq>>() {
+                        }.getType();
+                        yhqlist = gson.fromJson(jso.getString("CouponList"), listType1);
                     } else {
                         Message msg = handler.obtainMessage();
                         msg.what = 2;
@@ -522,6 +543,10 @@ public class VipJiayouFragment extends Fragment {
         tv_maxdk = (TextView) view.findViewById(R.id.vip_tv_maxdk);
         tv_dkmoney = (TextView) view.findViewById(R.id.vip_tv_dkmoney);
         tv_obtainjf = (TextView) view.findViewById(R.id.vip_tv_hasjf);
+
+        rl_yhqchose = (RelativeLayout) view.findViewById(R.id.oil_rl_yhqchose);
+        tv_yhq = (TextView) view.findViewById(R.id.oil_tv_yhq);
+        tv_sfmoney = (TextView) view.findViewById(R.id.vip_tv_sfmoney);
 
         rl_oilchose = (RelativeLayout) view.findViewById(R.id.oil_rl_chose);
         rb_isYinlian = (RadioButton) view.findViewById(R.id.rb_yinlian);
@@ -578,11 +603,11 @@ public class VipJiayouFragment extends Fragment {
                                 int point = (int) Double.parseDouble(num);
                                 tv_zhmoney.setText(num);
                                 if (app.getIsPointByOilExp() == 1) {
-                                    int po=(int) Double.parseDouble(CommonUtils.multiply(point + "", app.getOilExpPointNum() + ""));
-                                    tv_obtainjf.setText(po+"");
+                                    int po = (int) Double.parseDouble(CommonUtils.multiply(point + "", app.getOilExpPointNum() + ""));
+                                    tv_obtainjf.setText(po + "");
                                 } else {
-                                    int po=(int) CommonUtils.div(Double.parseDouble(xfmoney) , Double.parseDouble(oilmsg.getOilPoint()),2);
-                                    tv_obtainjf.setText(po+"");
+                                    int po = (int) CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPoint()), 2);
+                                    tv_obtainjf.setText(po + "");
                                 }
                             }
 
@@ -602,6 +627,53 @@ public class VipJiayouFragment extends Fragment {
         });
 
 
+        rl_yhqchose.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View view) {
+                if (isSuccess) {
+                    if (!et_xfmoney.getText().toString().equals("")) {
+                        List<OilYhq> yhls = new ArrayList<>();
+                        for (int i = 0; i < yhqlist.size(); i++) {
+                            if (Double.parseDouble(et_xfmoney.getText().toString()) >= Double.parseDouble(yhqlist.get(i).CouponExpMoney)) {
+                                yhls.add(yhqlist.get(i));
+                            }
+                        }
+                        if (yhls.size() > 0) {
+                            YhqChoseDialog.yhqChoseDialog(getActivity(), yhls, 1, new InterfaceBack() {
+                                @Override
+                                public void onResponse(Object response) {
+                                    yhqmsg = (OilYhq) response;
+                                    tv_yhq.setText(yhqmsg.CouponName);
+
+                                    if (yhqmsg.CouponUseType.equals("0")) {//(0:代金券  1:折扣券)
+                                        double yh = CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(yhqmsg.CouponExpMoney), 1);
+                                        int yhnum = (int) yh;
+                                        String yhmoney = CommonUtils.multiply(yhnum + "", yhqmsg.CouponMoney);
+                                        tv_sfmoney.setText(StringUtil.twoNum(CommonUtils.del(Double.parseDouble(xfmoney), Double.parseDouble(yhmoney)) + ""));
+                                        LogUtils.d("xxyh", yhnum + "-----" + yhmoney);
+                                    } else {
+                                        tv_sfmoney.setText(StringUtil.twoNum(CommonUtils.multiply(xfmoney, CommonUtils.div(Double.parseDouble(yhqmsg.CouponMoney), 100.00, 2) + "")));
+                                    }
+                                }
+
+                                @Override
+                                public void onErrorResponse(Object msg) {
+
+                                }
+                            });
+                        } else {
+                            Toast.makeText(getActivity(), "无可用优惠券", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "请先输入消费金额", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "请先获取会员信息", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
         rl_jiesuan.setOnClickListener(new NoDoubleClickListener() {
             @Override
             protected void onNoDoubleClick(View view) {
@@ -619,7 +691,7 @@ public class VipJiayouFragment extends Fragment {
                             Toast.LENGTH_SHORT).show();
                 } else {
                     if (CommonUtils.checkNet(MyApplication.context)) {
-                        SystemQuanxian sysquanxian=app.getSysquanxian();
+                        SystemQuanxian sysquanxian = app.getSysquanxian();
 
                         if (isYue && sysquanxian.ispassword == 1) {
                             DialogUtil.pwdDialog(getActivity(), 1, new InterfaceBack() {
@@ -681,7 +753,7 @@ public class VipJiayouFragment extends Fragment {
 //        (订单折后总金额/标记B)取整
         params.put("OrderPoint", tv_obtainjf.getText().toString());
         params.put("TotalMoney", et_xfmoney.getText().toString());
-        params.put("DiscountMoney", et_xfmoney.getText().toString());
+        params.put("DiscountMoney", tv_sfmoney.getText().toString());
         params.put("OilNumber", tv_zhmoney.getText().toString());
 //        0=现金 1=银联 2=微信 3=支付宝 4=其他支付 5=余额(散客禁用)
         if (isMoney) {
