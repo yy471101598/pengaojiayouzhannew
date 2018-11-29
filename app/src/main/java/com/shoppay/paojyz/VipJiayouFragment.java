@@ -646,11 +646,16 @@ public class VipJiayouFragment extends Fragment {
                                     tv_yhq.setText(yhqmsg.CouponName);
 
                                     if (yhqmsg.CouponUseType.equals("0")) {//(0:代金券  1:折扣券)
-                                        double yh = CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(yhqmsg.CouponExpMoney), 1);
-                                        int yhnum = (int) yh;
-                                        String yhmoney = CommonUtils.multiply(yhnum + "", yhqmsg.CouponMoney);
-                                        tv_sfmoney.setText(StringUtil.twoNum(CommonUtils.del(Double.parseDouble(xfmoney), Double.parseDouble(yhmoney)) + ""));
-                                        LogUtils.d("xxyh", yhnum + "-----" + yhmoney);
+//                                        double yh = CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(yhqmsg.CouponExpMoney), 1);
+//                                        int yhnum = (int) yh;
+//                                        String yhmoney = CommonUtils.multiply(yhnum + "", yhqmsg.CouponMoney);
+//                                        tv_sfmoney.setText(StringUtil.twoNum(CommonUtils.del(Double.parseDouble(xfmoney), Double.parseDouble(yhmoney)) + ""));
+                                        double sfmoney = CommonUtils.del(Double.parseDouble(xfmoney), Double.parseDouble(yhqmsg.CouponMoney));
+                                        if (sfmoney > 0) {
+                                            tv_sfmoney.setText(StringUtil.twoNum(sfmoney + ""));
+                                        } else {
+                                            tv_sfmoney.setText("0.00");
+                                        }
                                     } else {
                                         tv_sfmoney.setText(StringUtil.twoNum(CommonUtils.multiply(xfmoney, CommonUtils.div(Double.parseDouble(yhqmsg.CouponMoney), 100.00, 2) + "")));
                                     }
@@ -771,6 +776,9 @@ public class VipJiayouFragment extends Fragment {
         }
         params.put("UserPwd", password);
         params.put("OilID", oilmsg.getOilID());
+        params.put("CouponID", yhqmsg.CouponID);
+        params.put("CouponMoney", yhqmsg.CouponMoney);
+        LogUtils.d("xxyh", new Gson().toJson(yhqmsg));
         LogUtils.d("xxparams", params.toString());
         String url = UrlTools.obtainUrl(getActivity(), "?Source=3", "OilExpense");
         LogUtils.d("xxurl", url);
