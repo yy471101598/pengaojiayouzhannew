@@ -777,7 +777,7 @@ public class VipJiayouFragment extends Fragment {
         params.put("UserPwd", password);
         params.put("OilID", oilmsg.getOilID());
         params.put("CouponID", yhqmsg.DetailID);
-        params.put("CouponMoney", yhqmsg.CouponMoney);
+        params.put("CouponMoney", CommonUtils.del(Double.parseDouble(et_xfmoney.getText().toString()), Double.parseDouble(tv_sfmoney.getText().toString())));
         LogUtils.d("xxyh", new Gson().toJson(yhqmsg));
         LogUtils.d("xxparams", params.toString());
         String url = UrlTools.obtainUrl(getActivity(), "?Source=3", "OilExpense");
