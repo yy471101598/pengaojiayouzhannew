@@ -38,6 +38,8 @@ public class JiaobanMsg {
     private String CashReceivable;
     private String MoneyChangeCreateTime;
     private String ShiftChangeAccount;
+    public String RechargeMoneySum;
+    public String PointNumberSum;
 
     public String getDrawMoneySum() {
         return DrawMoneySum;

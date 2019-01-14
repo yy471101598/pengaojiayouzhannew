@@ -83,6 +83,10 @@ public class FastJiaobanActivity extends Activity {
     EditText etXianjinhuizong;
     @Bind(R.id.rl_jiaoban)
     RelativeLayout rlJiaoban;
+    @Bind(R.id.tv_jifenhuizong)
+    TextView mTvJifenhuizong;
+    @Bind(R.id.tv_viprechargehuizong)
+    TextView mTvViprechargehuizong;
     private Activity ac;
     private Dialog dialog;
 
@@ -92,7 +96,7 @@ public class FastJiaobanActivity extends Activity {
         setContentView(R.layout.activity_jiaoban);
         ac = this;
         ButterKnife.bind(this);
-        dialog= DialogUtil.loadingDialog(ac, 1);
+        dialog = DialogUtil.loadingDialog(ac, 1);
         tvTitle.setText("快速交班");
         obtainJiaobanInfo();
     }
@@ -104,15 +108,15 @@ public class FastJiaobanActivity extends Activity {
                 finish();
                 break;
             case R.id.rl_jiaoban:
-                if(null==etAccount.getText().toString()||etAccount.getText().toString().equals("")){
-                    Toast.makeText(ac,"请输入账号",Toast.LENGTH_SHORT).show();
-                }else  if(null==etXianjinhuizong.getText().toString()||etXianjinhuizong.getText().toString().equals("")) {
+                if (null == etAccount.getText().toString() || etAccount.getText().toString().equals("")) {
+                    Toast.makeText(ac, "请输入账号", Toast.LENGTH_SHORT).show();
+                } else if (null == etXianjinhuizong.getText().toString() || etXianjinhuizong.getText().toString().equals("")) {
                     Toast.makeText(ac, "请输入实收现金汇总", Toast.LENGTH_SHORT).show();
-                }else  if(null==etQitaxianjinzhichu.getText().toString()||etQitaxianjinzhichu.getText().toString().equals("")) {
+                } else if (null == etQitaxianjinzhichu.getText().toString() || etQitaxianjinzhichu.getText().toString().equals("")) {
                     Toast.makeText(ac, "请输入其他现金支出", Toast.LENGTH_SHORT).show();
-                }else  if(null==etQitaxianjinshouru.getText().toString()||etQitaxianjinshouru.getText().toString().equals("")) {
+                } else if (null == etQitaxianjinshouru.getText().toString() || etQitaxianjinshouru.getText().toString().equals("")) {
                     Toast.makeText(ac, "请输入其他现金收入", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     jiaoban();
                 }
                 break;
@@ -125,8 +129,8 @@ public class FastJiaobanActivity extends Activity {
         final PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
         client.setCookieStore(myCookieStore);
         RequestParams params = new RequestParams();
-        params.put("UserID",  PreferenceHelper.readString(ac, "shoppay", "UserID",""));
-        params.put("UserShopID", PreferenceHelper.readString(ac, "shoppay", "ShopID",""));
+        params.put("UserID", PreferenceHelper.readString(ac, "shoppay", "UserID", ""));
+        params.put("UserShopID", PreferenceHelper.readString(ac, "shoppay", "ShopID", ""));
         LogUtils.d("xxparams", params.toString());
         String url = UrlTools.obtainUrl(ac, "?Source=3", "GetUserWork");
         LogUtils.d("xxurl", url);
@@ -140,33 +144,35 @@ public class FastJiaobanActivity extends Activity {
                     if (jso.getInt("flag") == 0) {
                         Gson gson = new Gson();
                         JiaobanMsg infomsg = gson.fromJson(jso.getString("vdata"), JiaobanMsg.class);
-                        tvTixianhuizong.setText(StringUtil.twoNum(infomsg.getDrawMoneySum()+""));
-                        tvQitayingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyOthePaymentSum()+""));
-                        tvYueyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyChangeBalanceSum()+""));
-                        tvZengsongyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyChangeGiveMoneySum()+""));
-                        tvXianjinyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyChangeCashSum()+""));
-                        tvWxyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyWeChatPaySum()+""));
-                        tvYinlianyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyChangeUnionPaySum()+""));
-                        tvAliyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyAlipaySum()+""));
-                        tvYouhuiyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyChangeCouponMoneySum()+""));
-                        tvJfdkyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyPointMoneySum()+""));
-                        tvZongyingyeehuizong.setText(StringUtil.twoNum(infomsg.getTotalTurnover()+""));
-                        tvYinshouxianjinhuizong.setText(StringUtil.twoNum(infomsg.getCashReceivable()+""));
+                        tvTixianhuizong.setText(StringUtil.twoNum(infomsg.getDrawMoneySum() + ""));
+                        tvQitayingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyOthePaymentSum() + ""));
+                        tvYueyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyChangeBalanceSum() + ""));
+                        tvZengsongyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyChangeGiveMoneySum() + ""));
+                        tvXianjinyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyChangeCashSum() + ""));
+                        tvWxyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyWeChatPaySum() + ""));
+                        tvYinlianyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyChangeUnionPaySum() + ""));
+                        tvAliyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyAlipaySum() + ""));
+                        tvYouhuiyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyChangeCouponMoneySum() + ""));
+                        tvJfdkyingxiaohuizong.setText(StringUtil.twoNum(infomsg.getMoneyPointMoneySum() + ""));
+                        tvZongyingyeehuizong.setText(StringUtil.twoNum(infomsg.getTotalTurnover() + ""));
+                        tvYinshouxianjinhuizong.setText(StringUtil.twoNum(infomsg.getCashReceivable() + ""));
                         tvJiaobanNum.setText(infomsg.getShiftChangeAccount());
                         tvJiaobanTime.setText(infomsg.getMoneyChangeCreateTime());
+                        mTvJifenhuizong.setText(StringUtil.twoNum(infomsg.PointNumberSum));
+                        mTvViprechargehuizong.setText(StringUtil.twoNum(infomsg.RechargeMoneySum));
                     } else {
-                        Toast.makeText(ac,jso.getString("msg"),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ac, jso.getString("msg"), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     dialog.dismiss();
-                    Toast.makeText(ac,"获取信息失败，请重试",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ac, "获取信息失败，请重试", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 dialog.dismiss();
-                Toast.makeText(ac,"获取信息失败，请重试",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ac, "获取信息失败，请重试", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -178,13 +184,13 @@ public class FastJiaobanActivity extends Activity {
         final PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
         client.setCookieStore(myCookieStore);
         RequestParams params = new RequestParams();
-        params.put("UserID",  PreferenceHelper.readString(ac, "shoppay", "UserID",""));
-        params.put("UserShopID", PreferenceHelper.readString(ac, "shoppay", "ShopID",""));
-        params.put("OtherCashIn",etQitaxianjinshouru.getText().toString());
-        params.put("OtherCashOut",etQitaxianjinzhichu.getText().toString());
-        params.put("Account",etAccount.getText().toString());
-        params.put("password",etPassword.getText().toString());
-        params.put("TotalCashMoney",etXianjinhuizong.getText().toString());
+        params.put("UserID", PreferenceHelper.readString(ac, "shoppay", "UserID", ""));
+        params.put("UserShopID", PreferenceHelper.readString(ac, "shoppay", "ShopID", ""));
+        params.put("OtherCashIn", etQitaxianjinshouru.getText().toString());
+        params.put("OtherCashOut", etQitaxianjinzhichu.getText().toString());
+        params.put("Account", etAccount.getText().toString());
+        params.put("password", etPassword.getText().toString());
+        params.put("TotalCashMoney", etXianjinhuizong.getText().toString());
         LogUtils.d("xxparams", params.toString());
         String url = UrlTools.obtainUrl(ac, "?Source=3", "SubmitUserWork");
         LogUtils.d("xxurl", url);
@@ -196,33 +202,33 @@ public class FastJiaobanActivity extends Activity {
                     LogUtils.d("xxJiaobaninfoS", new String(responseBody, "UTF-8"));
                     JSONObject jso = new JSONObject(new String(responseBody, "UTF-8"));
                     if (jso.getInt("flag") == 1) {
-                        Toast.makeText(ac,jso.getString("msg"),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ac, jso.getString("msg"), Toast.LENGTH_SHORT).show();
                         JSONObject jsonObject = (JSONObject) jso.getJSONArray("print").get(0);
                         if (jsonObject.getInt("printNumber") == 0) {
-                           finish();
+                            finish();
                         } else {
                             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                             if (bluetoothAdapter.isEnabled()) {
                                 BluetoothUtil.connectBlueTooth(MyApplication.context);
                                 BluetoothUtil.sendData(DayinUtils.dayin(jsonObject.getString("printContent")), jsonObject.getInt("printNumber"));
-                              finish();
+                                finish();
                             } else {
-                               finish();
+                                finish();
                             }
                         }
                     } else {
-                        Toast.makeText(ac,jso.getString("msg"),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ac, jso.getString("msg"), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     dialog.dismiss();
-                    Toast.makeText(ac,"交班失败，请重试",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ac, "交班失败，请重试", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 dialog.dismiss();
-                Toast.makeText(ac,"交班失败，请重试",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ac, "交班失败，请重试", Toast.LENGTH_SHORT).show();
             }
         });
     }
