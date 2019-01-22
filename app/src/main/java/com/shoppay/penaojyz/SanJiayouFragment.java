@@ -30,7 +30,6 @@ import com.loopj.android.http.RequestParams;
 import com.shoppay.penaojyz.bean.OilMsg;
 import com.shoppay.penaojyz.bean.SystemQuanxian;
 import com.shoppay.penaojyz.http.InterfaceBack;
-import com.shoppay.penaojyz.tools.ActivityStack;
 import com.shoppay.penaojyz.tools.BluetoothUtil;
 import com.shoppay.penaojyz.tools.CommonUtils;
 import com.shoppay.penaojyz.tools.DateUtils;
@@ -57,30 +56,32 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public class SanJiayouFragment extends Fragment {
-    private EditText et_money,et_mark;
+    private EditText et_money, et_mark;
     private RelativeLayout rl_jiesuan;
     private Dialog dialog;
     private Dialog paydialog;
-    private TextView tv_jiesuan,tv_oil,tv_oilnum;
+    private TextView tv_jiesuan, tv_oil, tv_oilnum;
     private RadioButton rb_money, rb_wx, rb_zhifubao, rb_isYinlian, rb_yue, rb_qita;
     private boolean isMoney = true, isZhifubao = false, isYinlian = false, isQita = false, isWx = false;
     private RadioGroup mRadiogroup;
     private String orderAccount;
-    private boolean isSuccess=false;
-    private List<OilMsg> list=new ArrayList<>();
+    private boolean isSuccess = false;
+    private List<OilMsg> list = new ArrayList<>();
     private OilMsg oilmsg;
     private String xfmoney;
-//    private MsgReceiver msgReceiver;
-//    private Intent intent;
-//    private Dialog weixinDialog;
+    //    private MsgReceiver msgReceiver;
+    private Intent finishintent;
+    //    private Dialog weixinDialog;
     private MyApplication app;
     private SystemQuanxian sysquanxian;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_sanjiayouconsumption,container, false);
-        app= (MyApplication) getActivity().getApplication();
-        sysquanxian=app.getSysquanxian();
+        View view = inflater.inflate(R.layout.fragment_sanjiayouconsumption, container, false);
+        app = (MyApplication) getActivity().getApplication();
+        sysquanxian = app.getSysquanxian();
+        finishintent = new Intent("com.shoppay.wy.fastfinish");
         initView(view);
         dialog = DialogUtil.loadingDialog(getActivity(), 1);
         paydialog = DialogUtil.payloadingDialog(getActivity(), 1);
@@ -126,7 +127,7 @@ public class SanJiayouFragment extends Fragment {
                 }
             }
         });
-        switch (app.getPayway()){
+        switch (app.getPayway()) {
             case 1:
                 isMoney = true;
                 isQita = false;
@@ -176,7 +177,7 @@ public class SanJiayouFragment extends Fragment {
                 mRadiogroup.check(R.id.rb_qita);
                 break;
         }
-   obtainVipInfo();
+        obtainVipInfo();
 
 
         et_money.addTextChangedListener(new TextWatcher() {
@@ -196,17 +197,17 @@ public class SanJiayouFragment extends Fragment {
                     tv_oilnum.setText("0.00");
                 } else {
                     if (!isSuccess) {
-                        Toast.makeText(MyApplication.context,"系统异常，请退出重试", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyApplication.context, "系统异常，请退出重试", Toast.LENGTH_SHORT).show();
                         et_money.setText("");
                     } else {
-                        if(tv_oil.getText().toString().equals("请选择")){
+                        if (tv_oil.getText().toString().equals("请选择")) {
                             Toast.makeText(MyApplication.context, "请先选择油品", Toast.LENGTH_SHORT).show();
                             et_money.setText("");
 
-                        }else{
+                        } else {
                             xfmoney = editable.toString();
-                            double price=Double.parseDouble(oilmsg.getOilPrice());
-                            String num= StringUtil.twoNum(CommonUtils.div(Double.parseDouble(xfmoney),price,2)+"");
+                            double price = Double.parseDouble(oilmsg.getOilPrice());
+                            String num = StringUtil.twoNum(CommonUtils.div(Double.parseDouble(xfmoney), price, 2) + "");
                             tv_oilnum.setText(num);
 //                            tv_obtainjf.setText(point);
                         }
@@ -235,8 +236,8 @@ public class SanJiayouFragment extends Fragment {
         client.setCookieStore(myCookieStore);
         RequestParams params = new RequestParams();
         params.put("MemCard", 0);
-        params.put("UserID",  PreferenceHelper.readString(getActivity(), "shoppay", "UserID",""));
-        params.put("UserShopID", PreferenceHelper.readString(getActivity(), "shoppay", "ShopID",""));
+        params.put("UserID", PreferenceHelper.readString(getActivity(), "shoppay", "UserID", ""));
+        params.put("UserShopID", PreferenceHelper.readString(getActivity(), "shoppay", "ShopID", ""));
         LogUtils.d("xxparams", params.toString());
         String url = UrlTools.obtainUrl(getActivity(), "?Source=3", "GetMem");
         LogUtils.d("xxurl", url);
@@ -248,30 +249,31 @@ public class SanJiayouFragment extends Fragment {
                     LogUtils.d("xxVipinfoS", new String(responseBody, "UTF-8"));
                     JSONObject jso = new JSONObject(new String(responseBody, "UTF-8"));
                     if (jso.getInt("flag") == 1) {
-                        isSuccess=true;
+                        isSuccess = true;
                         Gson gson = new Gson();
                         Type listType = new TypeToken<List<OilMsg>>() {
                         }.getType();
                         list = gson.fromJson(jso.getString("OilList"), listType);
                     } else {
-                        isSuccess=false;
-                        Toast.makeText(getActivity(),"获取信息失败，请重试",Toast.LENGTH_SHORT).show();
+                        isSuccess = false;
+                        Toast.makeText(getActivity(), "获取信息失败，请重试", Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
-                    isSuccess=false;
+                    isSuccess = false;
                     dialog.dismiss();
-                    Toast.makeText(getActivity(),"获取信息失败，请重试",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "获取信息失败，请重试", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                isSuccess=false;
+                isSuccess = false;
                 dialog.dismiss();
-                Toast.makeText(getActivity(),"获取信息失败，请重试",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "获取信息失败，请重试", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
     private void initView(View view) {
         et_mark = (EditText) view.findViewById(R.id.san_et_remark);
         et_money = (EditText) view.findViewById(R.id.san_et_money);
@@ -308,37 +310,37 @@ public class SanJiayouFragment extends Fragment {
             rb_yue.setVisibility(View.GONE);
         }
 
-       tv_oil.setOnClickListener(new NoDoubleClickListener() {
-           @Override
-           protected void onNoDoubleClick(View view) {
-               if(isSuccess){
+        tv_oil.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View view) {
+                if (isSuccess) {
 
-                   OilChoseDialog.oilChoseDialog(getActivity(), list, 1, new InterfaceBack() {
-                       @Override
-                       public void onResponse(Object response) {
-                           oilmsg=(OilMsg) response;
-                           tv_oil.setText(oilmsg.getOilName());
-                           if (et_money.getText().toString().equals("")) {
-                               tv_oilnum.setText("0.00");
-                           } else {
+                    OilChoseDialog.oilChoseDialog(getActivity(), list, 1, new InterfaceBack() {
+                        @Override
+                        public void onResponse(Object response) {
+                            oilmsg = (OilMsg) response;
+                            tv_oil.setText(oilmsg.getOilName());
+                            if (et_money.getText().toString().equals("")) {
+                                tv_oilnum.setText("0.00");
+                            } else {
 
-                               double price=Double.parseDouble(oilmsg.getOilPrice());
-                               String num = StringUtil.twoNum(CommonUtils.div(Double.parseDouble(xfmoney), price, 2) + "");
-                               int point = (int) Double.parseDouble(num);
-                               tv_oilnum.setText(num);
-                           }
-                       }
+                                double price = Double.parseDouble(oilmsg.getOilPrice());
+                                String num = StringUtil.twoNum(CommonUtils.div(Double.parseDouble(xfmoney), price, 2) + "");
+                                int point = (int) Double.parseDouble(num);
+                                tv_oilnum.setText(num);
+                            }
+                        }
 
-                       @Override
-                       public void onErrorResponse(Object msg) {
+                        @Override
+                        public void onErrorResponse(Object msg) {
 
-                       }
-                   });
-               }else{
-                   Toast.makeText(getActivity(),"系统异常，请退出重进",Toast.LENGTH_SHORT).show();
-               }
-           }
-       });
+                        }
+                    });
+                } else {
+                    Toast.makeText(getActivity(), "系统异常，请退出重进", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         rl_jiesuan.setOnClickListener(new NoDoubleClickListener() {
             @Override
@@ -385,15 +387,15 @@ public class SanJiayouFragment extends Fragment {
         final PersistentCookieStore myCookieStore = new PersistentCookieStore(MyApplication.context);
         client.setCookieStore(myCookieStore);
         RequestParams params = new RequestParams();
-        params.put("UserID",  PreferenceHelper.readString(getActivity(), "shoppay", "UserID",""));
-        params.put("UserShopID", PreferenceHelper.readString(getActivity(), "shoppay", "ShopID",""));
-        params.put("MemID",0);
+        params.put("UserID", PreferenceHelper.readString(getActivity(), "shoppay", "UserID", ""));
+        params.put("UserShopID", PreferenceHelper.readString(getActivity(), "shoppay", "ShopID", ""));
+        params.put("MemID", 0);
         params.put("OrderAccount", orderNum);
 //        (订单折后总金额/标记B)取整
-        params.put("OrderPoint","");
+        params.put("OrderPoint", "");
         params.put("TotalMoney", et_money.getText().toString());
         params.put("DiscountMoney", et_money.getText().toString());
-        params.put("OilNumber",tv_oilnum.getText().toString());
+        params.put("OilNumber", tv_oilnum.getText().toString());
 //        0=现金 1=银联 2=微信 3=支付宝 4=其他支付 5=余额(散客禁用)
         if (isMoney) {
             params.put("payType", 0);
@@ -407,12 +409,12 @@ public class SanJiayouFragment extends Fragment {
             params.put("payType", 4);
         }
         params.put("UserPwd", "");
-        params.put("OilID",oilmsg.getOilID());
-        params.put("OrderExpInfo",et_mark.getText().toString());
+        params.put("OilID", oilmsg.getOilID());
+        params.put("OrderExpInfo", et_mark.getText().toString());
         LogUtils.d("xxparams", params.toString());
         String url = UrlTools.obtainUrl(getActivity(), "?Source=3", "OilExpense");
         LogUtils.d("xxurl", url);
-        client.setTimeout(120*1000);
+        client.setTimeout(120 * 1000);
         client.post(url, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -424,15 +426,15 @@ public class SanJiayouFragment extends Fragment {
                         Toast.makeText(getActivity(), jso.getString("msg"), Toast.LENGTH_LONG).show();
                         JSONObject jsonObject = (JSONObject) jso.getJSONArray("print").get(0);
                         if (jsonObject.getInt("printNumber") == 0) {
-                            ActivityStack.create().finishActivity(JiayouConsumptionActivity.class);
+                            getActivity().sendBroadcast(finishintent);
                         } else {
                             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                             if (bluetoothAdapter.isEnabled()) {
                                 BluetoothUtil.connectBlueTooth(MyApplication.context);
                                 BluetoothUtil.sendData(DayinUtils.dayin(jsonObject.getString("printContent")), jsonObject.getInt("printNumber"));
-                                ActivityStack.create().finishActivity(JiayouConsumptionActivity.class);
+                                getActivity().sendBroadcast(finishintent);
                             } else {
-                                ActivityStack.create().finishActivity(JiayouConsumptionActivity.class);
+                                getActivity().sendBroadcast(finishintent);
                             }
                         }
 
@@ -547,7 +549,7 @@ public class SanJiayouFragment extends Fragment {
         } else {
             map.put("payType", 3);
         }
-        client.setTimeout(120*1000);
+        client.setTimeout(120 * 1000);
         LogUtils.d("xxparams", map.toString());
         String url = UrlTools.obtainUrl(getActivity(), "?Source=3", "PayOnLine");
         LogUtils.d("xxurl", url);
@@ -561,7 +563,6 @@ public class SanJiayouFragment extends Fragment {
                     if (jso.getInt("flag") == 1) {
 
                         JSONObject jsonObject = (JSONObject) jso.getJSONArray("print").get(0);
-                        DayinUtils.dayin(jsonObject.getString("printContent"));
                         if (jsonObject.getInt("printNumber") == 0) {
                         } else {
                             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();

@@ -15,7 +15,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,6 @@ import com.shoppay.penaojyz.bean.VipInfo;
 import com.shoppay.penaojyz.bean.VipInfoMsg;
 import com.shoppay.penaojyz.card.ReadCardOpt;
 import com.shoppay.penaojyz.http.InterfaceBack;
-import com.shoppay.penaojyz.tools.ActivityStack;
 import com.shoppay.penaojyz.tools.BluetoothUtil;
 import com.shoppay.penaojyz.tools.CommonUtils;
 import com.shoppay.penaojyz.tools.DateUtils;
@@ -152,7 +150,7 @@ public class VipJiayouFragment extends Fragment {
     private boolean isSuccess = false;
     private TextView tv_yhq, tv_sfmoney;
 
-    //    private Intent intent;
+        private Intent finishintent;
 //    private Dialog weixinDialog;
 
     @Nullable
@@ -161,7 +159,7 @@ public class VipJiayouFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_vipjiayouconsumption, container, false);
         app = (MyApplication) getActivity().getApplication();
         sysquanxian = app.getSysquanxian();
-        Log.d("xx", app.toString());
+        finishintent=new Intent("com.shoppay.wy.fastfinish");
         initView(view);
         dialog = DialogUtil.loadingDialog(getActivity(), 1);
         paydialog = DialogUtil.payloadingDialog(getActivity(), 1);
@@ -797,15 +795,15 @@ public class VipJiayouFragment extends Fragment {
                         Toast.makeText(getActivity(), jso.getString("msg"), Toast.LENGTH_LONG).show();
                         JSONObject jsonObject = (JSONObject) jso.getJSONArray("print").get(0);
                         if (jsonObject.getInt("printNumber") == 0) {
-                            ActivityStack.create().finishActivity(JiayouConsumptionActivity.class);
+                            getActivity().sendBroadcast(finishintent);
                         } else {
                             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                             if (bluetoothAdapter.isEnabled()) {
                                 BluetoothUtil.connectBlueTooth(MyApplication.context);
                                 BluetoothUtil.sendData(DayinUtils.dayin(jsonObject.getString("printContent")), jsonObject.getInt("printNumber"));
-                                ActivityStack.create().finishActivity(JiayouConsumptionActivity.class);
+                                getActivity().sendBroadcast(finishintent);
                             } else {
-                                ActivityStack.create().finishActivity(JiayouConsumptionActivity.class);
+                                getActivity().sendBroadcast(finishintent);
                             }
                         }
 
@@ -900,7 +898,6 @@ public class VipJiayouFragment extends Fragment {
                     if (jso.getInt("flag") == 1) {
 
                         JSONObject jsonObject = (JSONObject) jso.getJSONArray("print").get(0);
-                        DayinUtils.dayin(jsonObject.getString("printContent"));
                         if (jsonObject.getInt("printNumber") == 0) {
                         } else {
                             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
