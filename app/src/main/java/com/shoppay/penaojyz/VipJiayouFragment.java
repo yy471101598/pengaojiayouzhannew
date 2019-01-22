@@ -875,7 +875,7 @@ public class VipJiayouFragment extends Fragment {
         map.put("ordertype", 9);
         orderAccount = DateUtils.getCurrentTime("yyyyMMddHHmmss");
         map.put("account", orderAccount);
-        map.put("money", tv_zhmoney.getText().toString());
+        map.put("money", tv_sfmoney.getText().toString());
 //        0=现金 1=银联 2=微信 3=支付宝
         if (isMoney) {
             map.put("payType", 0);
