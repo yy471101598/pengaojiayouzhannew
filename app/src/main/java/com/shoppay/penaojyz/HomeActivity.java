@@ -19,6 +19,7 @@ import com.shoppay.penaojyz.bean.Home;
 import com.shoppay.penaojyz.bean.QuanxianManage;
 import com.shoppay.penaojyz.tools.ActivityStack;
 import com.shoppay.penaojyz.tools.DialogUtil;
+import com.shoppay.penaojyz.tools.PreferenceHelper;
 import com.shoppay.penaojyz.tools.SysUtil;
 import com.shoppay.penaojyz.view.MyGridViews;
 
@@ -58,8 +59,16 @@ public class HomeActivity extends Activity{
                 Home home=(Home) adapterView.getItemAtPosition(i);
                 switch (home.name){
                     case "加油消费":
-                        Intent jy=new Intent(ac,JiayouConsumptionActivity.class);
-                        startActivity(jy);
+//                        值为0时，加油消费跳转至原有界面并保留其业务逻辑
+//                        值为1时，加油消费跳转至新做界面走新制定业务逻辑
+                      int type=  PreferenceHelper.readInt(ac, "shoppay", "IsDiscountMoney", 0);
+                      if(type==0) {
+                          Intent jy = new Intent(ac, JiayouConsumptionActivity.class);
+                          startActivity(jy);
+                      }else{
+                          Intent jy = new Intent(ac, JiayouNewConsumptionActivity.class);
+                          startActivity(jy);
+                      }
                         break;
                     case "快速交班":
                         Intent jiaoban=new Intent(ac,FastJiaobanActivity.class);

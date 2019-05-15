@@ -265,6 +265,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         AsyncHttpClient client = new AsyncHttpClient();
         final PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
         client.setCookieStore(myCookieStore);
+//        admin密码也是
+//        授权码 600300  会员卡号10086
         RequestParams params = new RequestParams();
         params.put("Account", et_account.getText().toString());
         params.put("password", et_pwd.getText().toString());
@@ -282,6 +284,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         PreferenceHelper.write(ac, "shoppay", "bianhao", et_yuming.getText().toString());
                         PreferenceHelper.write(ac, "shoppay", "UserID", jso.getJSONObject("vdata").getString("UserID"));
                         PreferenceHelper.write(ac, "shoppay", "ShopID", jso.getJSONObject("vdata").getString("ShopID"));
+                        PreferenceHelper.write(ac, "shoppay", "IsDiscountMoney", jso.getJSONObject("vdata").getInt("IsDiscountMoney"));
+                        PreferenceHelper.write(ac, "shoppay", "OtherPayType", jso.getJSONObject("vdata").getInt("OtherPayType"));
                         JSONArray memuau = jso.getJSONObject("vdata").getJSONArray("MenuAuthority");
                         JSONArray dataau = jso.getJSONObject("vdata").getJSONArray("DataAuthority");
                         myApplication.setPayway(jso.getJSONObject("vdata").getInt("ExpPayType"));
@@ -368,6 +372,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         Toast.makeText(ac, jso.getString("msg"), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
+                    LogUtils.d("xxe",e.getMessage());
                     dialog.dismiss();
                     Toast.makeText(ac, "登录失败，请重新登录", Toast.LENGTH_SHORT).show();
                 }

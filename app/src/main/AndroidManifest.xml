@@ -42,6 +42,11 @@
             android:screenOrientation="portrait"
             />
         <activity
+            android:name="com.shoppay.penaojyz.JiayouNewConsumptionActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            />
+        <activity
             android:name="com.shoppay.penaojyz.FastJiaobanActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"

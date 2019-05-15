@@ -303,9 +303,9 @@ public class SanJiayouFragment extends Fragment {
         if (sysquanxian.isxianjin == 0) {
             rb_money.setVisibility(View.GONE);
         }
-        if (sysquanxian.isqita == 0) {
-            rb_qita.setVisibility(View.GONE);
-        }
+//        if (sysquanxian.isqita == 0) {
+//            rb_qita.setVisibility(View.GONE);
+//        }
         if (sysquanxian.isyue == 0) {
             rb_yue.setVisibility(View.GONE);
         }
@@ -361,6 +361,15 @@ public class SanJiayouFragment extends Fragment {
                             }
                         } else if (isZhifubao) {
                             if (sysquanxian.iszfbpay == 0) {
+                                Intent mipca = new Intent(getActivity(), MipcaActivityCapture.class);
+                                mipca.putExtra("type", "pay");
+                                startActivityForResult(mipca, 222);
+                            } else {
+                                jiesuan(DateUtils.getCurrentTime("yyyyMMddHHmmss"));
+                            }
+                        } else if (isQita) {
+                            int type= PreferenceHelper.readInt(getActivity(), "shoppay", "OtherPayType", 1);
+                            if (type == 0) {
                                 Intent mipca = new Intent(getActivity(), MipcaActivityCapture.class);
                                 mipca.putExtra("type", "pay");
                                 startActivityForResult(mipca, 222);
@@ -546,7 +555,9 @@ public class SanJiayouFragment extends Fragment {
             map.put("payType", 2);
         } else if (isYinlian) {
             map.put("payType", 1);
-        } else {
+        }  else if (isQita) {
+            map.put("payType", 4);
+        }else {
             map.put("payType", 3);
         }
         client.setTimeout(120 * 1000);

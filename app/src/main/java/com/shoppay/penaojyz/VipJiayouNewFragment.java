@@ -68,7 +68,7 @@ import static com.shoppay.penaojyz.tools.DialogUtil.money;
  * Created by songxiaotao on 2017/7/1.
  */
 
-public class VipJiayouFragment extends Fragment {
+public class VipJiayouNewFragment extends Fragment {
     private EditText et_card, et_xfmoney, et_zfmoney, et_yuemoney, et_jfmoney;
     private TextView tv_vipname, tv_vipjf, tv_zhmoney, tv_maxdk, tv_dkmoney, tv_obtainjf, tv_vipyue, tv_jiesuan, tv_vipdengji, tv_vipcard, tv_oil, tv_carcard, tv_oiltype;
     private RelativeLayout rl_jiesuan;
@@ -316,8 +316,8 @@ public class VipJiayouFragment extends Fragment {
 
                         } else {
                             xfmoney = editable.toString();
-                            double price = CommonUtils.del(Double.parseDouble(oilmsg.getOilPrice()), Double.parseDouble(oilmsg.getOilDiscountMoney()));
-                            String num = StringUtil.twoNum(CommonUtils.div(Double.parseDouble(xfmoney), price, 2) + "");
+//                            double price = CommonUtils.del(Double.parseDouble(oilmsg.getOilPrice()), Double.parseDouble(oilmsg.getOilDiscountMoney()));
+                            String num = StringUtil.twoNum(CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPrice()), 2) + "");
                             int point = (int) Double.parseDouble(num);
                             tv_zhmoney.setText(num);
                             if (app.getIsPointByOilExp() == 1) {
@@ -328,7 +328,10 @@ public class VipJiayouFragment extends Fragment {
                                 tv_obtainjf.setText(po + "");
                             }
                             tv_yhq.setText("请选择");
-                            tv_sfmoney.setText(xfmoney);
+//                            折后总金额=消费总金额-(加油升数*每升优惠金额)
+                            String yhm=  CommonUtils.multiply(num+"",oilmsg.getOilDiscountMoney());
+                            double sfm= CommonUtils.del(Double.parseDouble(xfmoney),Double.parseDouble(yhm));
+                            tv_sfmoney.setText(StringUtil.twoNum(sfm+""));
 //                            if (tv_yhq.getText().toString().equals("请选择")) {
 //                                tv_sfmoney.setText(xfmoney);
 //                            } else {
@@ -596,10 +599,14 @@ public class VipJiayouFragment extends Fragment {
                                 tv_obtainjf.setText("0.00");
                             } else {
 
-                                double price = CommonUtils.del(Double.parseDouble(oilmsg.getOilPrice()), Double.parseDouble(oilmsg.getOilDiscountMoney()));
-                                String num = StringUtil.twoNum(CommonUtils.div(Double.parseDouble(xfmoney), price, 2) + "");
+//                                double price = CommonUtils.del(Double.parseDouble(oilmsg.getOilPrice()), Double.parseDouble(oilmsg.getOilDiscountMoney()));
+                                String num = StringUtil.twoNum(CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPrice()), 2) + "");
                                 int point = (int) Double.parseDouble(num);
                                 tv_zhmoney.setText(num);
+
+                                String yhm=  CommonUtils.multiply(num+"",oilmsg.getOilDiscountMoney());
+                                double sfm= CommonUtils.del(Double.parseDouble(xfmoney),Double.parseDouble(yhm));
+                                tv_sfmoney.setText(StringUtil.twoNum(sfm+""));
                                 if (app.getIsPointByOilExp() == 1) {
                                     int po = (int) Double.parseDouble(CommonUtils.multiply(point + "", app.getOilExpPointNum() + ""));
                                     tv_obtainjf.setText(po + "");
@@ -648,14 +655,14 @@ public class VipJiayouFragment extends Fragment {
 //                                        int yhnum = (int) yh;
 //                                        String yhmoney = CommonUtils.multiply(yhnum + "", yhqmsg.CouponMoney);
 //                                        tv_sfmoney.setText(StringUtil.twoNum(CommonUtils.del(Double.parseDouble(xfmoney), Double.parseDouble(yhmoney)) + ""));
-                                        double sfmoney = CommonUtils.del(Double.parseDouble(xfmoney), Double.parseDouble(yhqmsg.CouponMoney));
+                                        double sfmoney = CommonUtils.del(Double.parseDouble(tv_sfmoney.getText().toString()), Double.parseDouble(yhqmsg.CouponMoney));
                                         if (sfmoney > 0) {
                                             tv_sfmoney.setText(StringUtil.twoNum(sfmoney + ""));
                                         } else {
                                             tv_sfmoney.setText("0.00");
                                         }
                                     } else {
-                                        tv_sfmoney.setText(StringUtil.twoNum(CommonUtils.multiply(xfmoney, CommonUtils.div(Double.parseDouble(yhqmsg.CouponMoney), 100.00, 2) + "")));
+                                        tv_sfmoney.setText(StringUtil.twoNum(CommonUtils.multiply(tv_sfmoney.getText().toString(), CommonUtils.div(Double.parseDouble(yhqmsg.CouponMoney), 100.00, 2) + "")));
                                     }
                                 }
 
