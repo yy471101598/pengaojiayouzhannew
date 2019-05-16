@@ -317,14 +317,14 @@ public class VipJiayouNewFragment extends Fragment {
                         } else {
                             xfmoney = editable.toString();
 //                            double price = CommonUtils.del(Double.parseDouble(oilmsg.getOilPrice()), Double.parseDouble(oilmsg.getOilDiscountMoney()));
-                            String num = StringUtil.twoNum(CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPrice()), 2) + "");
+                            String num = StringUtil.twoNum(CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPrice()), 1) + "");
                             int point = (int) Double.parseDouble(num);
                             tv_zhmoney.setText(num);
                             if (app.getIsPointByOilExp() == 1) {
                                 int po = (int) Double.parseDouble(CommonUtils.multiply(point + "", app.getOilExpPointNum() + ""));
                                 tv_obtainjf.setText(po + "");
                             } else {
-                                int po = (int) CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPoint()), 2);
+                                int po = (int) CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPoint()), 1);
                                 tv_obtainjf.setText(po + "");
                             }
                             tv_yhq.setText("请选择");
@@ -600,7 +600,7 @@ public class VipJiayouNewFragment extends Fragment {
                             } else {
 
 //                                double price = CommonUtils.del(Double.parseDouble(oilmsg.getOilPrice()), Double.parseDouble(oilmsg.getOilDiscountMoney()));
-                                String num = StringUtil.twoNum(CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPrice()), 2) + "");
+                                String num = StringUtil.twoNum(CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPrice()), 1) + "");
                                 int point = (int) Double.parseDouble(num);
                                 tv_zhmoney.setText(num);
 
@@ -611,7 +611,7 @@ public class VipJiayouNewFragment extends Fragment {
                                     int po = (int) Double.parseDouble(CommonUtils.multiply(point + "", app.getOilExpPointNum() + ""));
                                     tv_obtainjf.setText(po + "");
                                 } else {
-                                    int po = (int) CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPoint()), 2);
+                                    int po = (int) CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPoint()), 1);
                                     tv_obtainjf.setText(po + "");
                                 }
                             }
