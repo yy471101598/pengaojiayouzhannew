@@ -663,10 +663,24 @@ public class VipJiayouNewFragment extends Fragment {
                                         } else {
                                             tv_sfmoney.setText("0.0");
                                         }
+                                        if (app.getIsPointByOilExp() == 1) {
+                                            int po = (int) Double.parseDouble(CommonUtils.multiply(tv_zhmoney.getText().toString(), app.getOilExpPointNum() + ""));
+                                            tv_obtainjf.setText(po + "");
+                                        } else {
+                                            int po = (int) CommonUtils.div(Double.parseDouble(tv_sfmoney.getText().toString()), Double.parseDouble(oilmsg.getOilPoint()), 1);
+                                            tv_obtainjf.setText(po + "");
+                                        }
                                     } else {
                                         String zf = CommonUtils.multiply(tv_sfmoney.getText().toString(), CommonUtils.div(Double.parseDouble(yhqmsg.CouponMoney), 100.00, 1) + "");
                                         CouponMoney = StringUtil.twoNum(CommonUtils.del(Double.parseDouble(tv_sfmoney.getText().toString()), Double.parseDouble(zf)) + "");
                                         tv_sfmoney.setText(StringUtil.oneNum(zf));
+                                        if (app.getIsPointByOilExp() == 1) {
+                                            int po = (int) Double.parseDouble(CommonUtils.multiply(tv_zhmoney.getText().toString(), app.getOilExpPointNum() + ""));
+                                            tv_obtainjf.setText(po + "");
+                                        } else {
+                                            int po = (int) CommonUtils.div(Double.parseDouble(tv_sfmoney.getText().toString()), Double.parseDouble(oilmsg.getOilPoint()), 1);
+                                            tv_obtainjf.setText(po + "");
+                                        }
                                     }
                                 }
 
