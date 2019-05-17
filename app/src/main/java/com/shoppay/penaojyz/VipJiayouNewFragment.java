@@ -316,22 +316,23 @@ public class VipJiayouNewFragment extends Fragment {
 
                         } else {
                             xfmoney = editable.toString();
+
 //                            double price = CommonUtils.del(Double.parseDouble(oilmsg.getOilPrice()), Double.parseDouble(oilmsg.getOilDiscountMoney()));
                             String num = StringUtil.twoNum(CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPrice()), 1) + "");
                             int point = (int) Double.parseDouble(num);
                             tv_zhmoney.setText(num);
-                            if (app.getIsPointByOilExp() == 1) {
-                                int po = (int) Double.parseDouble(CommonUtils.multiply(point + "", app.getOilExpPointNum() + ""));
-                                tv_obtainjf.setText(po + "");
-                            } else {
-                                int po = (int) CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPoint()), 1);
-                                tv_obtainjf.setText(po + "");
-                            }
                             tv_yhq.setText("请选择");
 //                            折后总金额=消费总金额-(加油升数*每升优惠金额)
                             String yhm = CommonUtils.multiply(num + "", oilmsg.getOilDiscountMoney());
                             double sfm = CommonUtils.del(Double.parseDouble(xfmoney), Double.parseDouble(yhm));
                             tv_sfmoney.setText(StringUtil.oneNum(sfm + ""));
+                            if (app.getIsPointByOilExp() == 1) {
+                                int po = (int) Double.parseDouble(CommonUtils.multiply(point + "", app.getOilExpPointNum() + ""));
+                                tv_obtainjf.setText(po + "");
+                            } else {
+                                int po = (int) CommonUtils.div(Double.parseDouble(tv_sfmoney.getText().toString()), Double.parseDouble(oilmsg.getOilPoint()), 1);
+                                tv_obtainjf.setText(po + "");
+                            }
 //                            if (tv_yhq.getText().toString().equals("请选择")) {
 //                                tv_sfmoney.setText(xfmoney);
 //                            } else {
@@ -611,7 +612,7 @@ public class VipJiayouNewFragment extends Fragment {
                                     int po = (int) Double.parseDouble(CommonUtils.multiply(point + "", app.getOilExpPointNum() + ""));
                                     tv_obtainjf.setText(po + "");
                                 } else {
-                                    int po = (int) CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPoint()), 1);
+                                    int po = (int) CommonUtils.div(Double.parseDouble(tv_sfmoney.getText().toString()), Double.parseDouble(oilmsg.getOilPoint()), 1);
                                     tv_obtainjf.setText(po + "");
                                 }
                             }

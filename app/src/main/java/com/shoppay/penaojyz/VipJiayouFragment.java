@@ -604,7 +604,7 @@ public class VipJiayouFragment extends Fragment {
                                     int po = (int) Double.parseDouble(CommonUtils.multiply(point + "", app.getOilExpPointNum() + ""));
                                     tv_obtainjf.setText(po + "");
                                 } else {
-                                    int po = (int) CommonUtils.div(Double.parseDouble(xfmoney), Double.parseDouble(oilmsg.getOilPoint()), 1);
+                                    int po = (int) CommonUtils.div(Double.parseDouble(tv_sfmoney.getText().toString()), Double.parseDouble(oilmsg.getOilPoint()), 1);
                                     tv_obtainjf.setText(po + "");
                                 }
                             }
