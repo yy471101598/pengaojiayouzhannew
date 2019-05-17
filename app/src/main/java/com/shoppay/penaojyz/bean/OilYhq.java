@@ -9,4 +9,5 @@ public class OilYhq {
     public String DetailCode;//     优惠券编码
     public String DetailID;
 
+
 }

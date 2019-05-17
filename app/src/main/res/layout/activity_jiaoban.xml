@@ -169,7 +169,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="其他营销汇总："
+                android:text="扫码营销汇总："
                 android:layout_marginRight="5dp"
                 android:layout_alignParentRight="true"
                 android:textColor="@color/text_30"
@@ -1204,7 +1204,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
-                android:text="现金营销汇总+微信营销汇总+银联营销汇总+支付宝营销汇总+其他营销汇总+其他现金收入-其他现金支出-会员提现汇总"
+                android:text="现金营销汇总+微信营销汇总+银联营销汇总+支付宝营销汇总+扫码营销汇总+其他现金收入-其他现金支出-会员提现汇总"
                 android:textColor="@color/text_30"
                 android:textSize="11sp" />
 
