@@ -57,6 +57,7 @@ import com.shoppay.penaojyz.wxcode.MipcaActivityCapture;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -651,7 +652,7 @@ public class VipJiayouFragment extends Fragment {
                                         double sfmoney = CommonUtils.del(Double.parseDouble(xfmoney), Double.parseDouble(yhqmsg.CouponMoney));
                                         CouponMoney=yhqmsg.CouponMoney;
                                         if (sfmoney > 0) {
-                                            tv_sfmoney.setText(StringUtil.twoNum(sfmoney + ""));
+                                            tv_sfmoney.setText(new BigDecimal(sfmoney).setScale(1,BigDecimal.ROUND_HALF_UP).floatValue()+"");
                                         } else {
                                             tv_sfmoney.setText("0.00");
                                         }
@@ -664,9 +665,9 @@ public class VipJiayouFragment extends Fragment {
                                             tv_obtainjf.setText(po + "");
                                         }
                                     } else {
-                                        String zf = CommonUtils.multiply(tv_sfmoney.getText().toString(), CommonUtils.div(Double.parseDouble(yhqmsg.CouponMoney), 100.00, 1) + "");
+                                        String zf = CommonUtils.multiply(tv_sfmoney.getText().toString(), CommonUtils.div(Double.parseDouble(yhqmsg.CouponMoney), 100.00, 2) + "");
                                         CouponMoney = StringUtil.twoNum(CommonUtils.del(Double.parseDouble(tv_sfmoney.getText().toString()), Double.parseDouble(zf)) + "");
-                                        tv_sfmoney.setText(StringUtil.oneNum(zf));
+                                        tv_sfmoney.setText(new BigDecimal(Double.parseDouble(zf)).setScale(1,BigDecimal.ROUND_HALF_UP).floatValue()+"");
                                         if (app.getIsPointByOilExp() == 1) {
                                             int po = (int) Double.parseDouble(CommonUtils.multiply(tv_zhmoney.getText().toString(), app.getOilExpPointNum() + ""));
                                             tv_obtainjf.setText(po + "");
